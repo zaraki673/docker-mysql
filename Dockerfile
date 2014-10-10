@@ -1,5 +1,5 @@
-FROM sameersbn/debian:jessie.20141001
-MAINTAINER sameer@damagehead.com
+FROM ubuntu:14.04
+MAINTAINER Kevin Larsonneur <kl@klarsonneur.eu>
 
 RUN apt-get update \
  && apt-get install -y mysql-server \
