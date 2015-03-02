@@ -1,8 +1,5 @@
 # Table of Contents
 
-- [Introduction](#introduction)
-- [Changelog](Changelog.md)
-- [Reporting Issues](#reporting-issues)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Data Store](#data-store)
@@ -10,50 +7,18 @@
 - [Shell Access](#shell-access)
 - [Upgrading](#upgrading)
 
-# Introduction
-
-Dockerfile to build a MySQL container image which can be linked to other containers.
-
-# Reporting Issues
-
-Docker is a relatively new project and is active being developed and tested by a thriving community of developers and testers and every release of docker features many enhancements and bugfixes.
-
-Given the nature of the development and release cycle it is very important that you have the latest version of docker installed because any issue that you encounter might have already been fixed with a newer docker release.
-
-For ubuntu users I suggest [installing docker](https://docs.docker.com/installation/ubuntulinux/) using docker's own package repository since the version of docker packaged in the ubuntu repositories are a little dated.
-
-Here is the shortform of the installation of an updated version of docker on ubuntu.
-
-```bash
-sudo apt-get purge docker.io
-curl -s https://get.docker.io/ubuntu/ | sudo sh
-sudo apt-get update
-sudo apt-get install lxc-docker
-```
-
-Fedora and RHEL/CentOS users should try disabling selinux with `setenforce 0` and check if resolves the issue. If it does than there is not much that I can help you with. You can either stick with selinux disabled (not recommended by redhat) or switch to using ubuntu.
-
-If using the latest docker version and/or disabling selinux does not fix the issue then please file a issue request on the [issues](https://github.com/sameersbn/docker-mysql/issues) page.
-
-In your issue report please make sure you provide the following information:
-
-- The host ditribution and release version.
-- Output of the `docker version` command
-- Output of the `docker info` command
-- The `docker run` command you used to run the image (mask out the sensitive bits).
-
 # Installation
 
 Pull the latest version of the image from the docker index. This is the recommended method of installation as it is easier to update image in the future. These builds are performed by the **Docker Trusted Build** service.
 
 ```bash
-docker pull sameersbn/mysql:latest
+docker pull zaraki673/mysql:latest
 ```
 
 Alternately you can build the image yourself.
 
 ```bash
-git clone https://github.com/sameersbn/docker-mysql.git
+git clone https://github.com/zaraki673/docker-mysql.git
 cd docker-mysql
 docker build -t="$USER/mysql" .
 ```
@@ -63,13 +28,13 @@ docker build -t="$USER/mysql" .
 Run the mysql image
 
 ```bash
-docker run -name mysql -d sameersbn/mysql:latest
+docker run -name mysql -d zaraki673/mysql:latest
 ```
 
 You can access the mysql server as the root user using the following command:
 
 ```bash
-docker run -it --rm --volumes-from=mysql sameersbn/mysql mysql -uroot
+docker run -it --rm --volumes-from=mysql zaraki673/mysql mysql -u root
 ```
 
 # Data Store
@@ -87,7 +52,7 @@ The updated run command looks like this.
 
 ```
 docker run -name mysql -d \
-  -v /opt/mysql/data:/var/lib/mysql sameersbn/mysql:latest
+  -v /opt/mysql/data:/var/lib/mysql zaraki673/mysql:latest
 ```
 
 This will make sure that the data stored in the database is not lost when the image is stopped and started again.
@@ -101,7 +66,7 @@ This will make sure that the data stored in the database is not lost when the im
 > However if you were using this image before this feature was added, then it will not work as-is. You are required to create the `debian-sys-maint` user
 >
 >```bash
->docker run -it --rm --volumes-from=mysql sameersbn/mysql \
+>docker run -it --rm --volumes-from=mysql zaraki673/mysql \
 >  mysql -uroot -e "GRANT ALL PRIVILEGES on *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '' WITH GRANT OPTION;"
 >```
 
@@ -109,7 +74,7 @@ To create a new database specify the database name in the `DB_NAME` variable. Th
 
 ```bash
 docker run --name mysql -d \
-  -e 'DB_NAME=dbname' sameersbn/mysql:latest
+  -e 'DB_NAME=dbname' zaraki673/mysql:latest
 ```
 
 To create a new user you should specify the `DB_USER` and `DB_PASS` variables.
@@ -117,7 +82,7 @@ To create a new user you should specify the `DB_USER` and `DB_PASS` variables.
 ```bash
 docker run --name mysql -d \
   -e 'DB_USER=dbuser' -e 'DB_PASS=dbpass' -e 'DB_NAME=dbname' \
-  sameersbn/mysql:latest
+  zaraki673/mysql:latest
 ```
 
 The above command will create a user *dbuser* with the password *dbpass* and will also create a database named *dbname*. The *dbuser* user will have full/remote access to the database.
@@ -162,11 +127,11 @@ docker stop mysql
 - **Step 2**: Update the docker image.
 
 ```bash
-docker pull sameersbn/mysql:latest
+docker pull zaraki673/mysql:latest
 ```
 
 - **Step 3**: Start the image
 
 ```bash
-docker run -name mysql -d [OPTIONS] sameersbn/mysql:latest
+docker run -name mysql -d [OPTIONS] zaraki673/mysql:latest
 ```
